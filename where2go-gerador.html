@@ -17,18 +17,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
 .topbar-logo{font-size:20px;font-weight:800;color:var(--red)}
 .topbar-logo span{color:var(--text)}
-.gear-btn{background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);padding:4px;border-radius:6px}
-.gear-btn:hover{background:var(--bg);color:var(--text)}
-
-/* ── Config modal ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;display:none;align-items:center;justify-content:center}
-.modal-overlay.show{display:flex}
-.modal{background:#fff;border-radius:var(--radius);padding:28px;width:90%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,.15)}
-.modal h3{font-size:17px;margin-bottom:16px}
-.modal label{font-size:13px;font-weight:600;margin-bottom:4px;display:block}
-.modal input{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:16px}
-.modal input:focus{outline:none;border-color:var(--red)}
-.modal-actions{display:flex;justify-content:flex-end;gap:8px}
 
 /* ── Main container ── */
 .container{max-width:700px;margin:0 auto;padding:40px 20px 80px}
@@ -160,26 +148,6 @@ textarea.edit-input{min-height:80px}
 <!-- TOP BAR -->
 <div class="topbar">
   <div class="topbar-logo">Where2<span>GO</span></div>
-  <button class="gear-btn" onclick="openConfig()" title="Configurações">⚙️</button>
-</div>
-
-<!-- CONFIG MODAL -->
-<div class="modal-overlay" id="configModal">
-  <div class="modal">
-    <h3>Configuração interna</h3>
-    <label>Chave da API Gemini</label>
-    <input id="cfgApiKey" type="password" placeholder="AIzaSy...">
-    <p style="font-size:12px;color:var(--muted);margin:-10px 0 14px">Pegue em <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--red)">aistudio.google.com/apikey</a></p>
-    <label>Modelo</label>
-    <input id="cfgModel" type="text" placeholder="gemini-2.5-flash">
-    <label>URL do Google Sheets (Apps Script)</label>
-    <input id="cfgSheets" type="text" placeholder="https://script.google.com/macros/s/...">
-    <p style="font-size:12px;color:var(--muted);margin:-10px 0 14px">URL do Web App que recebe os dados de publicação</p>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeConfig()">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveConfig()">Salvar</button>
-    </div>
-  </div>
 </div>
 
 <!-- MAIN -->
@@ -309,12 +277,11 @@ textarea.edit-input{min-height:80px}
 
 <script>
 /* ══════════════════════════════════════
-   CONFIG
+   CONFIG (interno — não exposto ao usuário)
    ══════════════════════════════════════ */
-function openConfig(){document.getElementById('configModal').classList.add('show');document.getElementById('cfgApiKey').value=localStorage.getItem('w2go_apikey')||'';document.getElementById('cfgModel').value=localStorage.getItem('w2go_model')||'gemini-2.5-flash';document.getElementById('cfgSheets').value=localStorage.getItem('w2go_sheets_url')||''}
-function closeConfig(){document.getElementById('configModal').classList.remove('show')}
-function saveConfig(){localStorage.setItem('w2go_apikey',document.getElementById('cfgApiKey').value.trim());localStorage.setItem('w2go_model',document.getElementById('cfgModel').value.trim()||'gemini-2.5-flash');localStorage.setItem('w2go_sheets_url',document.getElementById('cfgSheets').value.trim());closeConfig();showToast('Configuração salva')}
-document.getElementById('configModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeConfig()});
+const W2GO_API_KEY = 'AIzaSyBmZ919LkpdfYBqaJRickf3m6-PP5xjMmg';
+const W2GO_MODEL = 'gemini-2.5-flash';
+const W2GO_SHEETS_URL = 'https://script.google.com/macros/s/AKfycby6DBnsfrabKEb7HYXmtu0JaCYeC57NVJtRFSBS_bOHfJ6qLOwWrIH5Vcj1RPmHKZaftQ/exec';
 
 /* ══════════════════════════════════════
    CHIPS MULTI-SELECT
@@ -414,11 +381,10 @@ async function gerar(){
   const insta = document.getElementById('instaInput').value.trim();
   const extras = document.getElementById('extrasInput').value.trim();
   const ocasioes = getMulti('ocasioesGroup');
-  const apiKey = localStorage.getItem('w2go_apikey')||'';
-  const model = localStorage.getItem('w2go_model')||'gemini-2.5-flash';
+  const apiKey = W2GO_API_KEY;
+  const model = W2GO_MODEL;
 
   if(!nome){showError('Digite o nome do restaurante.');return}
-  if(!apiKey){openConfig();showToast('Configure a API key primeiro');return}
 
   // Build user message
   let msg = `Pesquise e gere experiências Where2GO para: ${nome}`;
@@ -578,7 +544,7 @@ function voltarForm(){showPanel('formPanel')}
 /* ══════════════════════════════════════
    PUBLISH + GOOGLE SHEETS
    ══════════════════════════════════════ */
-function getSheetsUrl(){ return localStorage.getItem('w2go_sheets_url') || ''; }
+function getSheetsUrl(){ return W2GO_SHEETS_URL; }
 
 let publishIdx = null;
 
@@ -706,7 +672,7 @@ document.getElementById('publishModal').addEventListener('click',e=>{if(e.target
 document.getElementById('nomeInput').addEventListener('keydown',e=>{if(e.key==='Enter')gerar()});
 
 /* ── Auto-open config if no key ── */
-if(!localStorage.getItem('w2go_apikey'))setTimeout(openConfig,600);
+// Config interna — tudo hardcoded
 </script>
 </body>
 </html>
