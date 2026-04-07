@@ -14,11 +14,33 @@
 // ============================================
 
 const SHEET_NAME = 'Experiências';
+const PAGINAS_SHEET = 'Páginas Geradas';
 const NOTIFY_EMAIL = 'fernanda.fujishima@w2go.com.br';
 
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
+
+    if (data.tipo === 'pagina_gerada') {
+      salvarPaginaGerada(data);
+      return ContentService
+        .createTextOutput(JSON.stringify({ status: 'ok', tipo: 'pagina_gerada' }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (data.tipo === 'lead_seller') {
+      salvarLeadSeller(data);
+      return ContentService
+        .createTextOutput(JSON.stringify({ status: 'ok', tipo: 'lead_seller' }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (data.tipo === 'experiencia_seller') {
+      salvarExperienciaSeller(data);
+      return ContentService
+        .createTextOutput(JSON.stringify({ status: 'ok', tipo: 'experiencia_seller' }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
 
     // Salvar na planilha
     salvarNaPlanilha(data);
@@ -83,6 +105,108 @@ function salvarNaPlanilha(data) {
     data.contato_email || '',
     data.contato_whatsapp || '',
     data.contato_cargo || '',
+    data.estabelecimento || '',
+    data.estabelecimento_telefone || '',
+    data.estabelecimento_bairro || '',
+    data.estabelecimento_instagram || '',
+    data.experiencia_nome || '',
+    data.experiencia_ocasiao || '',
+    data.experiencia_publico || '',
+    data.experiencia_tipo_combo || '',
+    data.experiencia_itens || '',
+    data.experiencia_especial || '',
+    data.experiencia_desc_curta || '',
+    data.experiencia_desc_completa || '',
+    data.experiencia_preco || '',
+    data.experiencia_preco_formato || '',
+    data.experiencia_tag || ''
+  ]);
+}
+
+// ── Páginas Geradas (batch automático) ──
+
+function salvarPaginaGerada(data) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(PAGINAS_SHEET);
+
+  if (!sheet) {
+    sheet = ss.insertSheet(PAGINAS_SHEET);
+    sheet.appendRow([
+      'Timestamp',
+      'Estabelecimento',
+      'Bairro',
+      'Instagram',
+      'Telefone',
+      'Qtd Experiências',
+      'Experiências JSON',
+      'URL Página',
+      'Status',
+      'Mensagem Outreach',
+      'Data Envio',
+      'Resposta'
+    ]);
+    sheet.getRange(1, 1, 1, 12).setFontWeight('bold').setBackground('#7C3AED').setFontColor('#FFFFFF');
+    sheet.setFrozenRows(1);
+  }
+
+  sheet.appendRow([
+    data.timestamp || new Date().toISOString(),
+    data.estabelecimento || '',
+    data.bairro || '',
+    data.instagram || '',
+    data.telefone || '',
+    data.qtd_experiencias || 0,
+    data.experiencias_json || '[]',
+    data.url_pagina || '',
+    data.status || 'Rascunho Automático',
+    data.mensagem_outreach || '',
+    '',
+    ''
+  ]);
+}
+
+// ── Leads Sellers ──
+
+function salvarLeadSeller(data) {
+  const ss = SpreadsheetApp.openById('1rUYOUplc-NbfEJ6aQ8G-b6Dp8z2Ve9YeRIJtQvHg_RU');
+  const SHEET = 'Leads Sellers';
+  let sheet = ss.getSheetByName(SHEET);
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET);
+    sheet.appendRow(['Timestamp','Nome','Email','WhatsApp','Cargo','Estabelecimento','Telefone','Status']);
+    sheet.getRange(1,1,1,8).setFontWeight('bold').setBackground('#F03637').setFontColor('#FFFFFF');
+    sheet.setFrozenRows(1);
+  }
+  sheet.appendRow([
+    data.timestamp || new Date().toISOString(),
+    data.nome || '',
+    data.email || '',
+    data.whatsapp || '',
+    data.cargo || '',
+    data.estabelecimento || '',
+    data.telefone || '',
+    'Novo'
+  ]);
+}
+
+// ── Experiências Sellers ──
+
+function salvarExperienciaSeller(data) {
+  const ss = SpreadsheetApp.openById('1rUYOUplc-NbfEJ6aQ8G-b6Dp8z2Ve9YeRIJtQvHg_RU');
+  const SHEET = 'Experiencias Sellers';
+  let sheet = ss.getSheetByName(SHEET);
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET);
+    sheet.appendRow(['Timestamp','Lead Nome','Lead Email','Lead WhatsApp','Lead Cargo','Estabelecimento','Telefone Estab.','Bairro','Instagram','Experiencia Nome','Ocasiao','Publico','Tipo Combo','Itens Inclusos','Elemento Especial','Descricao Curta','Descricao Completa','Preco','Formato Preco','Tag']);
+    sheet.getRange(1,1,1,20).setFontWeight('bold').setBackground('#7C3AED').setFontColor('#FFFFFF');
+    sheet.setFrozenRows(1);
+  }
+  sheet.appendRow([
+    data.timestamp || new Date().toISOString(),
+    data.lead_nome || '',
+    data.lead_email || '',
+    data.lead_whatsapp || '',
+    data.lead_cargo || '',
     data.estabelecimento || '',
     data.estabelecimento_telefone || '',
     data.estabelecimento_bairro || '',

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Where2GO — Gerador de Experiências</title>
+<title>Where2GO — Crie Experiencias para seu Estabelecimento</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -13,15 +13,12 @@
 }
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
 
-/* ── Top bar ── */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
 .topbar-logo{font-size:20px;font-weight:800;color:var(--red)}
 .topbar-logo span{color:var(--text)}
 
-/* ── Main container ── */
 .container{max-width:700px;margin:0 auto;padding:40px 20px 80px}
 
-/* ── Hero / Form ── */
 .hero{text-align:center;margin-bottom:32px}
 .hero h2{font-size:28px;font-weight:800;margin-bottom:8px}
 .hero p{font-size:15px;color:var(--muted);max-width:480px;margin:0 auto}
@@ -42,7 +39,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .chip-opt:hover{border-color:var(--red);background:var(--red-light)}
 .chip-opt.selected{border-color:var(--red);background:var(--red);color:#fff}
 
-/* ── Buttons ── */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 28px;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s}
 .btn-primary{background:var(--red);color:#fff}
 .btn-primary:hover{background:var(--red-dark);transform:translateY(-1px);box-shadow:0 4px 14px rgba(240,54,55,.3)}
@@ -54,7 +50,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .btn-outline:hover{border-color:var(--red);color:var(--red)}
 .btn-sm{padding:6px 12px;font-size:12px;border-radius:6px}
 
-/* ── Loading ── */
 .loading-panel{display:none;background:var(--card);border-radius:var(--radius);padding:40px 28px;box-shadow:var(--shadow);border:1px solid var(--border);text-align:center}
 .loading-panel.active{display:block}
 .spinner{width:52px;height:52px;border:4px solid var(--border);border-top-color:var(--red);border-radius:50%;animation:spin .9s linear infinite;margin:0 auto 24px}
@@ -68,11 +63,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .step.done .step-icon{border-color:#22c55e;background:#dcfce7;color:#22c55e}
 .loading-subtitle{font-size:13px;color:var(--muted);margin-top:16px;font-style:italic}
 
-/* ── Error ── */
 .error-msg{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;padding:14px;border-radius:8px;margin-top:16px;font-size:14px;display:none}
 .error-msg.show{display:block}
 
-/* ── Results ── */
 .results-panel{display:none}
 .results-panel.active{display:block}
 .results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
@@ -104,36 +97,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .btn-publish.published{background:#22c55e;cursor:default}
 .btn-publish.published:hover{background:#22c55e}
 
-/* ── Publish modal ── */
-.publish-modal{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;display:none;align-items:center;justify-content:center}
-.publish-modal.show{display:flex}
-.publish-box{background:#fff;border-radius:var(--radius);padding:32px;width:90%;max-width:480px;box-shadow:0 20px 60px rgba(0,0,0,.15);text-align:center}
-.publish-box .icon-big{font-size:48px;margin-bottom:12px}
-.publish-box h3{font-size:18px;margin-bottom:8px}
-.publish-box p{font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.6}
-.publish-box .info-box{background:var(--bg);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--text);text-align:left;margin-bottom:20px;line-height:1.7}
-.publish-box .info-box strong{color:var(--red)}
-.publish-actions{display:flex;gap:10px;justify-content:center}
-.pub-field{margin-bottom:12px}
-.pub-field label{font-size:13px;font-weight:600;margin-bottom:4px;display:block}
-.pub-field input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit}
-.pub-field input:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(240,54,55,.08)}
-.btn-primary.loading{pointer-events:none;opacity:.7}
-
-/* ── Success state ── */
 .success-banner{background:#dcfce7;border:1px solid #bbf7d0;border-radius:10px;padding:16px 20px;margin-bottom:16px;display:none;align-items:center;gap:10px;font-size:14px;color:#166534}
 .success-banner.show{display:flex}
 
-/* ── Editable ── */
 .editable{position:relative;cursor:pointer;border-radius:4px;transition:background .2s}
 .editable:hover{background:rgba(240,54,55,.05)}
 .editable:hover::after{content:'Editar';position:absolute;top:-20px;right:0;font-size:10px;color:var(--red);background:#fff;padding:1px 6px;border-radius:4px;box-shadow:var(--shadow);pointer-events:none}
 .edit-input{width:100%;padding:6px 8px;border:2px solid var(--red);border-radius:6px;font:inherit;font-size:inherit}
 textarea.edit-input{min-height:80px}
 
-/* ── Toast ── */
 .toast{position:fixed;bottom:24px;right:24px;background:#1a1a1a;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;transform:translateY(80px);opacity:0;transition:all .3s;z-index:999}
 .toast.show{transform:translateY(0);opacity:1}
+
+/* ── Lead form ── */
+.lead-field{margin-bottom:16px}
+.lead-field label{font-size:13px;font-weight:600;margin-bottom:6px;display:block;color:var(--text)}
+.lead-field input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;transition:border .2s}
+.lead-field input:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(240,54,55,.08)}
+.step-indicator{display:flex;gap:8px;justify-content:center;margin-bottom:24px}
+.step-dot{width:10px;height:10px;border-radius:50%;background:var(--border)}
+.step-dot.active{background:var(--red)}
+.step-dot.done{background:#22c55e}
+
+.saving-all{background:var(--card);border-radius:var(--radius);padding:20px;border:1px solid var(--border);margin-bottom:16px;text-align:center;font-size:14px;color:var(--muted)}
 
 @media(max-width:600px){
   .search-main{flex-direction:column}
@@ -145,52 +131,95 @@ textarea.edit-input{min-height:80px}
 </head>
 <body>
 
-<!-- TOP BAR -->
 <div class="topbar">
   <div class="topbar-logo">Where2<span>GO</span></div>
 </div>
 
-<!-- MAIN -->
 <div class="container">
 
-  <!-- FORM -->
-  <div id="formPanel">
+  <!-- STEP 1: LEAD DATA -->
+  <div id="leadPanel">
     <div class="hero">
-      <h2>Gerar experiências para um lugar</h2>
-      <p>Digite o nome do restaurante e a IA pesquisa tudo: cardápio, preços, ambiente, avaliações — e cria as experiências automaticamente.</p>
+      <h2>Crie experiencias para seu estabelecimento</h2>
+      <p>Preencha seus dados e vamos gerar experiencias exclusivas baseadas no seu cardapio — prontas pra vender na Where2GO.</p>
     </div>
+    <div class="step-indicator">
+      <div class="step-dot active"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+    </div>
+    <div class="search-card">
+      <div class="lead-field">
+        <label>Seu nome *</label>
+        <input id="leadNome" placeholder="Nome completo">
+      </div>
+      <div class="lead-field">
+        <label>Email *</label>
+        <input id="leadEmail" type="email" placeholder="seu@email.com">
+      </div>
+      <div class="lead-field">
+        <label>WhatsApp *</label>
+        <input id="leadWhatsapp" type="tel" placeholder="(11) 99999-9999">
+      </div>
+      <div class="lead-field">
+        <label>Cargo / Relacao com o estabelecimento</label>
+        <input id="leadCargo" placeholder="Ex: Dono, Gerente, Marketing...">
+      </div>
+      <div class="lead-field">
+        <label>Nome do estabelecimento *</label>
+        <input id="leadEstabelecimento" placeholder="Nome do restaurante ou bar">
+      </div>
+      <div class="lead-field">
+        <label>Telefone do estabelecimento</label>
+        <input id="leadTelefone" type="tel" placeholder="(11) 3333-4444">
+      </div>
+      <button class="btn btn-primary full" onclick="avancarParaGeracao()">
+        Continuar
+      </button>
+      <div id="leadError" class="error-msg"></div>
+    </div>
+  </div>
 
+  <!-- STEP 2: GENERATE -->
+  <div id="formPanel" style="display:none">
+    <div class="hero">
+      <h2>Gerar experiencias</h2>
+      <p>Agora vamos pesquisar o cardapio e criar as experiencias automaticamente.</p>
+    </div>
+    <div class="step-indicator">
+      <div class="step-dot done"></div>
+      <div class="step-dot active"></div>
+      <div class="step-dot"></div>
+    </div>
     <div class="search-card">
       <div class="search-main">
-        <input id="nomeInput" placeholder="Nome do restaurante ou bar..." autofocus>
+        <input id="nomeInput" placeholder="Nome do restaurante ou bar...">
       </div>
       <div class="search-row2">
-        <input id="bairroInput" placeholder="Bairro (opcional)" value="São Paulo">
+        <input id="bairroInput" placeholder="Bairro (opcional)" value="Sao Paulo">
         <input id="instaInput" placeholder="Instagram (opcional)" value="">
       </div>
       <div class="ocasioes-section">
-        <label>Ocasiões prioritárias <span style="font-weight:400;color:#aaa">(opcional — selecione as que quiser)</span></label>
+        <label>Ocasioes prioritarias <span style="font-weight:400;color:#aaa">(opcional)</span></label>
         <div class="chip-group multi-select" id="ocasioesGroup">
-          <div class="chip-opt" data-v="Date Night">💑 Date Night</div>
-          <div class="chip-opt" data-v="Aniversário">🎂 Aniversário</div>
-          <div class="chip-opt" data-v="Grupo de Amigos">👯 Grupo de Amigos</div>
-          <div class="chip-opt" data-v="Brunch">🥞 Brunch</div>
-          <div class="chip-opt" data-v="Happy Hour">🍻 Happy Hour</div>
-          <div class="chip-opt" data-v="Comemoração">🥂 Comemoração</div>
-          <div class="chip-opt" data-v="Despedida">🎊 Despedida</div>
-          <div class="chip-opt" data-v="Família">👨‍👩‍👧‍👦 Família</div>
+          <div class="chip-opt" data-v="Date Night">Date Night</div>
+          <div class="chip-opt" data-v="Aniversario">Aniversario</div>
+          <div class="chip-opt" data-v="Grupo de Amigos">Grupo de Amigos</div>
+          <div class="chip-opt" data-v="Brunch">Brunch</div>
+          <div class="chip-opt" data-v="Happy Hour">Happy Hour</div>
+          <div class="chip-opt" data-v="Comemoracao">Comemoracao</div>
+          <div class="chip-opt" data-v="Despedida">Despedida</div>
+          <div class="chip-opt" data-v="Familia">Familia</div>
         </div>
       </div>
-
       <details style="margin-bottom:18px">
-        <summary style="cursor:pointer;font-size:13px;color:var(--muted);font-weight:500">Informações extras (opcional)</summary>
+        <summary style="cursor:pointer;font-size:13px;color:var(--muted);font-weight:500">Informacoes extras (opcional)</summary>
         <div style="margin-top:12px">
-          <textarea id="extrasInput" rows="4" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;resize:vertical" placeholder="Cole aqui qualquer info extra: cardápio, pratos em destaque, preços, observações sobre o lugar..."></textarea>
+          <textarea id="extrasInput" rows="4" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;resize:vertical" placeholder="Cole aqui qualquer info extra: cardapio, pratos em destaque, precos..."></textarea>
         </div>
       </details>
-
       <button class="btn btn-primary full" id="btnGerar" onclick="gerar()">
-        Pesquisar e Gerar Experiências
+        Pesquisar e Gerar Experiencias
       </button>
       <div id="errorMsg" class="error-msg"></div>
     </div>
@@ -202,28 +231,33 @@ textarea.edit-input{min-height:80px}
     <h3 style="margin-bottom:24px;font-size:17px" id="loadingTitle">Pesquisando...</h3>
     <div class="loading-steps">
       <div class="step" data-step="0"><span class="step-icon"></span>Pesquisando o restaurante na web</div>
-      <div class="step" data-step="1"><span class="step-icon"></span>Buscando cardápio e preços</div>
-      <div class="step" data-step="2"><span class="step-icon"></span>Analisando ambiente e avaliações</div>
-      <div class="step" data-step="3"><span class="step-icon"></span>Mapeando ocasiões ideais</div>
-      <div class="step" data-step="4"><span class="step-icon"></span>Montando combos do cardápio</div>
-      <div class="step" data-step="5"><span class="step-icon"></span>Gerando experiências</div>
+      <div class="step" data-step="1"><span class="step-icon"></span>Buscando cardapio e precos</div>
+      <div class="step" data-step="2"><span class="step-icon"></span>Analisando ambiente e avaliacoes</div>
+      <div class="step" data-step="3"><span class="step-icon"></span>Mapeando ocasioes ideais</div>
+      <div class="step" data-step="4"><span class="step-icon"></span>Montando combos do cardapio</div>
+      <div class="step" data-step="5"><span class="step-icon"></span>Gerando experiencias</div>
     </div>
     <div class="loading-subtitle" id="loadingSub"></div>
   </div>
 
-  <!-- RESULTS -->
+  <!-- STEP 3: RESULTS -->
   <div id="resultsPanel" class="results-panel">
+    <div class="step-indicator" style="margin-bottom:16px">
+      <div class="step-dot done"></div>
+      <div class="step-dot done"></div>
+      <div class="step-dot active"></div>
+    </div>
     <div class="results-header">
       <h2 id="resultsTitle"></h2>
       <div class="results-actions">
-        <button class="btn btn-outline btn-sm" onclick="exportarTodas()">📋 Exportar JSON</button>
-        <button class="btn btn-outline btn-sm" onclick="voltarForm()">← Nova geração</button>
+        <button class="btn btn-outline btn-sm" onclick="voltarForm()">Gerar mais</button>
       </div>
     </div>
-    <div class="success-banner" id="successBanner">
+    <div class="success-banner show" id="successBanner">
       <span style="font-size:20px">✅</span>
-      <span id="successText"></span>
+      <span id="successText">Suas experiencias foram salvas! Nossa equipe vai entrar em contato pelo WhatsApp.</span>
     </div>
+    <div id="savingStatus" class="saving-all" style="display:none">Salvando experiencias...</div>
     <details class="results-context" id="researchContext">
       <summary>Ver pesquisa da IA</summary>
       <pre id="researchText"></pre>
@@ -236,15 +270,15 @@ textarea.edit-input{min-height:80px}
 <div id="toast" class="toast"></div>
 
 <script>
-/* ══════════════════════════════════════
-   CONFIG (interno — não exposto ao usuário)
-   ══════════════════════════════════════ */
 const W2GO_API_KEY = 'AIzaSyB30ITCt2sTv4abKaFJPKA6fPJ23Rp_YDY';
 const W2GO_MODEL = 'gemini-2.5-flash';
 const W2GO_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwjrrHuMWKtb3OlOd3mAAMrxCireEIK_RQdAIWj7ie0KG1SwbZv-mIy08849PpOWwYQ-g/exec';
 
+let leadData = null;
+let dadosAtuais = null;
+
 /* ══════════════════════════════════════
-   CHIPS MULTI-SELECT
+   CHIPS
    ══════════════════════════════════════ */
 document.querySelectorAll('.multi-select').forEach(g=>{
   g.querySelectorAll('.chip-opt').forEach(c=>{
@@ -257,10 +291,10 @@ function getMulti(id){return[...document.getElementById(id).querySelectorAll('.s
    HELPERS
    ══════════════════════════════════════ */
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
-function showError(msg){const el=document.getElementById('errorMsg');el.textContent=msg;el.classList.add('show')}
-function hideError(){document.getElementById('errorMsg').classList.remove('show')}
+function showError(id,msg){const el=document.getElementById(id);el.textContent=msg;el.classList.add('show')}
+function hideError(id){document.getElementById(id).classList.remove('show')}
 function showPanel(id){
-  ['formPanel','loadingPanel','resultsPanel'].forEach(p=>{
+  ['leadPanel','formPanel','loadingPanel','resultsPanel'].forEach(p=>{
     const el=document.getElementById(p);
     el.style.display='none';el.classList.remove('active');
   });
@@ -270,7 +304,49 @@ function showPanel(id){
 }
 
 /* ══════════════════════════════════════
-   LOADING ANIMATION
+   STEP 1: LEAD — salvar e avancar
+   ══════════════════════════════════════ */
+async function avancarParaGeracao(){
+  hideError('leadError');
+  const nome = document.getElementById('leadNome').value.trim();
+  const email = document.getElementById('leadEmail').value.trim();
+  const whatsapp = document.getElementById('leadWhatsapp').value.trim();
+  const cargo = document.getElementById('leadCargo').value.trim();
+  const estabelecimento = document.getElementById('leadEstabelecimento').value.trim();
+  const telefone = document.getElementById('leadTelefone').value.trim();
+
+  if(!nome || !email || !whatsapp || !estabelecimento){
+    showError('leadError','Preencha todos os campos obrigatorios (*).');
+    return;
+  }
+  if(!email.includes('@')){
+    showError('leadError','Email invalido.');
+    return;
+  }
+
+  leadData = { nome, email, whatsapp, cargo, estabelecimento, telefone };
+
+  // Salvar lead no Sheets imediatamente
+  try {
+    await fetch(W2GO_SHEETS_URL, {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        tipo: 'lead_seller',
+        timestamp: new Date().toISOString(),
+        nome, email, whatsapp, cargo, estabelecimento, telefone
+      })
+    });
+  } catch(e){}
+
+  // Pre-preencher nome do restaurante
+  document.getElementById('nomeInput').value = estabelecimento;
+  showPanel('formPanel');
+  showToast('Dados salvos!');
+}
+
+/* ══════════════════════════════════════
+   LOADING
    ══════════════════════════════════════ */
 function animateSteps(){
   const steps=document.querySelectorAll('#loadingPanel .step');
@@ -285,44 +361,44 @@ function animateSteps(){
 /* ══════════════════════════════════════
    SYSTEM PROMPT
    ══════════════════════════════════════ */
-const SYSTEM_PROMPT = `Você é um agente especialista que cria experiências de entrada para a plataforma Where2GO de São Paulo.
+const SYSTEM_PROMPT = `Voce e um agente especialista que cria experiencias de entrada para a plataforma Where2GO de Sao Paulo.
 
-Você receberá o nome de um restaurante/bar e informações encontradas via Google Search (grounding).
-Com base nos dados reais encontrados, gere as experiências.
+Voce recebera o nome de um restaurante/bar e informacoes encontradas via Google Search (grounding).
+Com base nos dados reais encontrados, gere as experiencias.
 
-REGRAS PARA AS EXPERIÊNCIAS:
-- Use APENAS pratos/itens que aparecem nas informações fornecidas (cardápio real)
-- Crie combos simples: 2 a 4 itens existentes agrupados por ocasião
-- Nunca invente pratos que o lugar não tem
+REGRAS PARA AS EXPERIENCIAS:
+- Use APENAS pratos/itens que aparecem nas informacoes fornecidas (cardapio real)
+- Crie combos simples: 2 a 4 itens existentes agrupados por ocasiao
+- Nunca invente pratos que o lugar nao tem
 - Nunca invente estruturas complexas (workshops, menus de 10 tempos, etc.)
-- O nome da experiência deve evocar a OCASIÃO, não o prato
-- Preço realista para SP: R$80–R$250 por pessoa (ou por casal quando indicado)
-- Gere entre 3 e 5 experiências variando as ocasiões
+- O nome da experiencia deve evocar a OCASIAO, nao o prato
+- Preco realista para SP: R$80-R$250 por pessoa (ou por casal quando indicado)
+- Gere entre 3 e 5 experiencias variando as ocasioes
 
-Ocasiões válidas: Date Night, Aniversário, Grupo de Amigos, Brunch, Happy Hour, Comemoração, Despedida de Solteiro(a), Família
+Ocasioes validas: Date Night, Aniversario, Grupo de Amigos, Brunch, Happy Hour, Comemoracao, Despedida de Solteiro(a), Familia
 
-O que faz uma experiência ser compartilhável:
-- Tem um elemento de 'ganho extra' simples (taça de boas-vindas, sobremesa surpresa)
-- O combo tem lógica natural (entrada + prato + bebida faz sentido junto)
+O que faz uma experiencia ser compartilhavel:
+- Tem um elemento de 'ganho extra' simples (taca de boas-vindas, sobremesa surpresa)
+- O combo tem logica natural (entrada + prato + bebida faz sentido junto)
 - O nome cria desejo imediato
 
-FORMATO DE RESPOSTA — retorne EXATAMENTE este JSON (sem markdown, sem crases, sem \`\`\`):
+FORMATO DE RESPOSTA - retorne EXATAMENTE este JSON (sem markdown, sem crases):
 {
   "estabelecimento": "nome real do lugar",
   "pesquisa_resumo": "Breve resumo do que encontrou sobre o lugar (2-3 frases)",
   "experiencias": [
     {
-      "nome": "Nome evocativo da ocasião (máx 50 chars)",
-      "ocasiao": "Date Night | Aniversário | Grupo de Amigos | Brunch | Happy Hour | Comemoração | Despedida | Família",
-      "publico": "Para duas pessoas | Em grupo | Família | Solo",
+      "nome": "Nome evocativo da ocasiao (max 50 chars)",
+      "ocasiao": "Date Night | Aniversario | Grupo de Amigos | Brunch | Happy Hour | Comemoracao | Despedida | Familia",
+      "publico": "Para duas pessoas | Em grupo | Familia | Solo",
       "tipo_combo": "ex: Entrada + Prato + Bebida + Sobremesa",
-      "itens_inclusos": ["item real do cardápio 1", "item 2", "item 3"],
+      "itens_inclusos": ["item real do cardapio 1", "item 2", "item 3"],
       "elemento_especial": "O que torna isso mais que um pedido normal",
-      "descricao_curta": "Frase de desejo para o card (máx 120 chars)",
-      "descricao_completa": "Parágrafo 1 criando expectativa.\\n\\nParágrafo 2 detalhando o que está incluso.",
+      "descricao_curta": "Frase de desejo para o card (max 120 chars)",
+      "descricao_completa": "Paragrafo 1 criando expectativa.\\n\\nParagrafo 2 detalhando o que esta incluso.",
       "preco_por_pessoa": 120,
       "preco_formato": "por pessoa | por casal | por grupo",
-      "tag": "Em alta | Mais vendido | Novo | Imperdível"
+      "tag": "Em alta | Mais vendido | Novo | Imperdivel"
     }
   ]
 }
@@ -330,29 +406,24 @@ FORMATO DE RESPOSTA — retorne EXATAMENTE este JSON (sem markdown, sem crases, 
 IMPORTANTE: Retorne APENAS o JSON. Sem texto antes, sem texto depois, sem markdown.`;
 
 /* ══════════════════════════════════════
-   GENERATE
+   STEP 2: GENERATE
    ══════════════════════════════════════ */
-let dadosAtuais = null;
-
 async function gerar(){
-  hideError();
+  hideError('errorMsg');
   const nome = document.getElementById('nomeInput').value.trim();
   const bairro = document.getElementById('bairroInput').value.trim();
   const insta = document.getElementById('instaInput').value.trim();
   const extras = document.getElementById('extrasInput').value.trim();
   const ocasioes = getMulti('ocasioesGroup');
-  const apiKey = W2GO_API_KEY;
-  const model = W2GO_MODEL;
 
-  if(!nome){showError('Digite o nome do restaurante.');return}
+  if(!nome){showError('errorMsg','Digite o nome do restaurante.');return}
 
-  // Build user message
-  let msg = `Pesquise e gere experiências Where2GO para: ${nome}`;
+  let msg = `Pesquise e gere experiencias Where2GO para: ${nome}`;
   if(bairro) msg += `, ${bairro}`;
   if(insta) msg += `\nInstagram: ${insta}`;
-  if(ocasioes.length) msg += `\nOcasiões prioritárias: ${ocasioes.join(', ')}`;
-  if(extras) msg += `\nInformações extras fornecidas:\n${extras}`;
-  msg += `\n\nUse os dados do Google Search para encontrar cardápio real, preços, ambiente e avaliações. Depois gere 3-5 experiências baseadas no que encontrar.`;
+  if(ocasioes.length) msg += `\nOcasioes prioritarias: ${ocasioes.join(', ')}`;
+  if(extras) msg += `\nInformacoes extras fornecidas:\n${extras}`;
+  msg += `\n\nUse os dados do Google Search para encontrar cardapio real, precos, ambiente e avaliacoes. Depois gere 3-5 experiencias baseadas no que encontrar.`;
 
   showPanel('loadingPanel');
   document.getElementById('loadingTitle').textContent = `Pesquisando ${nome}...`;
@@ -360,19 +431,15 @@ async function gerar(){
   const stepsIv = animateSteps();
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${W2GO_MODEL}:generateContent?key=${W2GO_API_KEY}`;
     const resp = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-        contents: [{ role: 'user', parts: [{ text: msg }] }],
-        tools: [{ google_search: {} }],
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 8192
-        }
+        system_instruction:{parts:[{text:SYSTEM_PROMPT}]},
+        contents:[{role:'user',parts:[{text:msg}]}],
+        tools:[{google_search:{}}],
+        generationConfig:{temperature:0.7,maxOutputTokens:8192}
       })
     });
 
@@ -380,58 +447,46 @@ async function gerar(){
 
     if(!resp.ok){
       const err = await resp.json().catch(()=>({}));
-      const errMsg = err.error?.message || `Erro HTTP ${resp.status}`;
-      throw new Error(errMsg);
+      throw new Error(err.error?.message || `Erro HTTP ${resp.status}`);
     }
 
     const data = await resp.json();
-
-    // Extract grounding sources and text
-    let searches = [];
-    let finalText = '';
-
+    let searches=[], finalText='';
     const candidate = data.candidates?.[0];
-    if(!candidate) throw new Error('Nenhuma resposta da IA. Tente novamente.');
+    if(!candidate) throw new Error('Nenhuma resposta da IA.');
 
-    // Get text from parts
-    for(const part of (candidate.content?.parts || [])){
+    for(const part of (candidate.content?.parts||[])){
       if(part.text) finalText += part.text;
     }
-
-    // Get grounding metadata (sources)
     const grounding = candidate.groundingMetadata;
     if(grounding?.groundingChunks){
       for(const chunk of grounding.groundingChunks){
-        if(chunk.web){
-          searches.push((chunk.web.title||'') + ' — ' + (chunk.web.uri||''));
-        }
+        if(chunk.web) searches.push((chunk.web.title||'')+' - '+(chunk.web.uri||''));
       }
     }
-    if(grounding?.searchEntryPoint?.renderedContent){
-      // Google search widget HTML (optional display)
-    }
-
-    if(!finalText) throw new Error('A IA não retornou texto. Tente novamente.');
+    if(!finalText) throw new Error('A IA nao retornou texto.');
 
     let json;
     try {
-      // Remove markdown code fences if present
       let cleaned = finalText.replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();
       json = JSON.parse(cleaned);
     } catch {
       const match = finalText.match(/\{[\s\S]*\}/);
       if(match) json = JSON.parse(match[0]);
-      else throw new Error('Resposta não é JSON válido. Tente novamente.');
+      else throw new Error('Resposta nao e JSON valido.');
     }
 
     dadosAtuais = json;
     dadosAtuais._searches = searches;
     renderResults(json);
 
+    // Auto-salvar TODAS as experiencias no Sheets
+    await salvarTodasExperiencias(json);
+
   } catch(e) {
     clearInterval(stepsIv);
     showPanel('formPanel');
-    showError(e.message);
+    showError('errorMsg', e.message);
   }
 }
 
@@ -440,19 +495,18 @@ async function gerar(){
    ══════════════════════════════════════ */
 function renderResults(data){
   document.getElementById('resultsTitle').textContent =
-    `${data.estabelecimento} — ${data.experiencias.length} experiências`;
+    `${data.estabelecimento} - ${data.experiencias.length} experiencias`;
 
-  // Research context
   let contextText = '';
   if(data.pesquisa_resumo) contextText += data.pesquisa_resumo + '\n\n';
   if(data._searches && data._searches.length){
-    contextText += 'Fontes consultadas:\n' + data._searches.map(s => '• ' + s).join('\n');
+    contextText += 'Fontes consultadas:\n' + data._searches.map(s=>'- '+s).join('\n');
   }
   document.getElementById('researchText').textContent = contextText || 'Sem dados de pesquisa.';
 
   const c = document.getElementById('cardsContainer');
   c.innerHTML = '';
-  data.experiencias.forEach((exp,i) => c.appendChild(buildCard(exp,i)));
+  data.experiencias.forEach((exp,i)=>c.appendChild(buildCard(exp,i)));
   showPanel('resultsPanel');
 }
 
@@ -464,7 +518,7 @@ function buildCard(exp,idx){
     'Em alta':'background:#fef3c7;color:#92400e',
     'Mais vendido':'background:#dcfce7;color:#166534',
     'Novo':'background:#dbeafe;color:#1e40af',
-    'Imperdível':'background:#fae8ff;color:#86198f'
+    'Imperdivel':'background:#fae8ff;color:#86198f'
   };
   card.innerHTML = `
     <div class="card-top"><div>
@@ -472,15 +526,12 @@ function buildCard(exp,idx){
       ${exp.tag ? `<span class="badge" style="${tc[exp.tag]||''}">${esc(exp.tag)}</span>` : ''}
     </div><span style="font-size:12px;color:var(--muted)">#${idx+1}</span></div>
     <div class="editable" onclick="editField(${idx},'nome',this)"><div class="card-title">${esc(exp.nome)}</div></div>
-    <div class="editable" onclick="editField(${idx},'publico',this)"><div class="card-publico">${esc(exp.publico)} · ${esc(exp.tipo_combo)}</div></div>
+    <div class="editable" onclick="editField(${idx},'publico',this)"><div class="card-publico">${esc(exp.publico)} - ${esc(exp.tipo_combo)}</div></div>
     <div class="chips">${(exp.itens_inclusos||[]).map(i=>`<span class="chip">${esc(i)}</span>`).join('')}</div>
     <div class="editable" onclick="editField(${idx},'elemento_especial',this)"><div class="especial">${esc(exp.elemento_especial)}</div></div>
     <div class="editable" onclick="editField(${idx},'descricao_curta',this)"><div class="desc-curta">"${esc(exp.descricao_curta)}"</div></div>
     <div class="editable" onclick="editField(${idx},'descricao_completa',this,'textarea')"><div class="desc-completa">${esc(exp.descricao_completa)}</div></div>
-    <div class="editable" onclick="editField(${idx},'preco_por_pessoa',this)"><div class="price-row"><span class="price">R$${exp.preco_por_pessoa}</span><span class="price-fmt">${esc(exp.preco_formato)}</span></div></div>
-    <div class="card-actions">
-      <button class="btn-publish" id="pub-${idx}" onclick="event.stopPropagation();salvarDireto(${idx})">💾 Salvar experiência</button>
-    </div>`;
+    <div class="editable" onclick="editField(${idx},'preco_por_pessoa',this)"><div class="price-row"><span class="price">R$${exp.preco_por_pessoa}</span><span class="price-fmt">${esc(exp.preco_formato)}</span></div></div>`;
   return card;
 }
 
@@ -498,60 +549,60 @@ function editField(idx,field,el,type){
   inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!isT){e.preventDefault();inp.blur()}if(e.key==='Escape')el.innerHTML=orig});
 }
 
-function exportarTodas(){navigator.clipboard.writeText(JSON.stringify(dadosAtuais,null,2)).then(()=>showToast('Tudo copiado!'))}
 function voltarForm(){showPanel('formPanel')}
 
 /* ══════════════════════════════════════
-   SALVAR (versão time — sem coleta de lead)
+   AUTO-SALVAR TODAS AS EXPERIENCIAS
    ══════════════════════════════════════ */
-async function salvarDireto(idx){
-  const exp = dadosAtuais.experiencias[idx];
-  const btn = document.getElementById(`pub-${idx}`);
-  btn.textContent = 'Salvando...';
-  btn.classList.add('loading');
+async function salvarTodasExperiencias(data){
+  const status = document.getElementById('savingStatus');
+  status.style.display = 'block';
+  status.textContent = 'Salvando experiencias...';
 
-  const payload = {
-    timestamp: new Date().toISOString(),
-    contato_nome: 'Time Where2GO',
-    contato_email: '',
-    contato_whatsapp: '',
-    contato_cargo: 'Interno',
-    estabelecimento: dadosAtuais.estabelecimento,
-    estabelecimento_telefone: '',
-    estabelecimento_bairro: document.getElementById('bairroInput').value.trim(),
-    estabelecimento_instagram: document.getElementById('instaInput').value.trim(),
-    experiencia_nome: exp.nome,
-    experiencia_ocasiao: exp.ocasiao,
-    experiencia_publico: exp.publico,
-    experiencia_tipo_combo: exp.tipo_combo,
-    experiencia_itens: (exp.itens_inclusos||[]).join(', '),
-    experiencia_especial: exp.elemento_especial,
-    experiencia_desc_curta: exp.descricao_curta,
-    experiencia_desc_completa: exp.descricao_completa,
-    experiencia_preco: exp.preco_por_pessoa,
-    experiencia_preco_formato: exp.preco_formato,
-    experiencia_tag: exp.tag
-  };
+  for(let i=0; i<data.experiencias.length; i++){
+    const exp = data.experiencias[i];
+    status.textContent = `Salvando experiencia ${i+1} de ${data.experiencias.length}...`;
 
-  try {
-    await fetch(W2GO_SHEETS_URL, {
-      method: 'POST', mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-  } catch(e) {}
+    const payload = {
+      tipo: 'experiencia_seller',
+      timestamp: new Date().toISOString(),
+      lead_nome: leadData?.nome || '',
+      lead_email: leadData?.email || '',
+      lead_whatsapp: leadData?.whatsapp || '',
+      lead_cargo: leadData?.cargo || '',
+      estabelecimento: data.estabelecimento,
+      estabelecimento_telefone: leadData?.telefone || '',
+      estabelecimento_bairro: document.getElementById('bairroInput').value.trim(),
+      estabelecimento_instagram: document.getElementById('instaInput').value.trim(),
+      experiencia_nome: exp.nome,
+      experiencia_ocasiao: exp.ocasiao,
+      experiencia_publico: exp.publico,
+      experiencia_tipo_combo: exp.tipo_combo,
+      experiencia_itens: (exp.itens_inclusos||[]).join(', '),
+      experiencia_especial: exp.elemento_especial,
+      experiencia_desc_curta: exp.descricao_curta,
+      experiencia_desc_completa: exp.descricao_completa,
+      experiencia_preco: exp.preco_por_pessoa,
+      experiencia_preco_formato: exp.preco_formato,
+      experiencia_tag: exp.tag
+    };
 
-  btn.textContent = '✅ Salva';
-  btn.classList.add('published');
-  btn.onclick = null;
-  showToast('Experiência salva!');
+    try {
+      await fetch(W2GO_SHEETS_URL, {
+        method:'POST', mode:'no-cors',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+    } catch(e){}
+  }
+
+  status.textContent = `✅ ${data.experiencias.length} experiencias salvas!`;
+  status.style.background = '#dcfce7';
+  status.style.color = '#166534';
+  status.style.borderColor = '#bbf7d0';
 }
 
-/* ── Enter to submit ── */
 document.getElementById('nomeInput').addEventListener('keydown',e=>{if(e.key==='Enter')gerar()});
-
-/* ── Auto-open config if no key ── */
-// Config interna — tudo hardcoded
 </script>
 </body>
 </html>

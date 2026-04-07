@@ -168,10 +168,6 @@ textarea.edit-input{min-height:80px}
         <input id="bairroInput" placeholder="Bairro (opcional)" value="São Paulo">
         <input id="instaInput" placeholder="Instagram (opcional)" value="">
       </div>
-      <div class="search-row2">
-        <input id="telefoneInput" placeholder="Telefone / WhatsApp do lugar" type="tel">
-      </div>
-
       <div class="ocasioes-section">
         <label>Ocasiões prioritárias <span style="font-weight:400;color:#aaa">(opcional — selecione as que quiser)</span></label>
         <div class="chip-group multi-select" id="ocasioesGroup">
@@ -235,42 +231,6 @@ textarea.edit-input{min-height:80px}
     <div id="cardsContainer"></div>
   </div>
 
-  <!-- PUBLISH MODAL -->
-  <div class="publish-modal" id="publishModal">
-    <div class="publish-box" style="text-align:left;max-width:520px">
-      <div style="text-align:center">
-        <div class="icon-big">📤</div>
-        <h3>Publicar experiência</h3>
-        <p style="margin-bottom:16px">Preencha seus dados de contato para enviar essa experiência para revisão.</p>
-      </div>
-      <div class="info-box" id="publishInfo" style="margin-bottom:16px"></div>
-      <div class="pub-field">
-        <label>Seu nome <span style="color:var(--red)">*</span></label>
-        <input id="pubNome" placeholder="Nome do responsável">
-      </div>
-      <div class="pub-field">
-        <label>Email <span style="color:var(--red)">*</span></label>
-        <input id="pubEmail" type="email" placeholder="seu@email.com">
-      </div>
-      <div class="pub-field">
-        <label>WhatsApp <span style="color:var(--red)">*</span></label>
-        <input id="pubWhatsapp" type="tel" placeholder="(11) 99999-9999">
-      </div>
-      <div class="pub-field">
-        <label>Cargo / Relação com o estabelecimento</label>
-        <input id="pubCargo" placeholder="Ex: Dono, Gerente, Marketing...">
-      </div>
-      <div id="pubError" style="color:#dc2626;font-size:13px;margin-top:8px;display:none"></div>
-      <p style="font-size:12px;color:var(--muted);margin-top:14px;line-height:1.6;text-align:center">
-        As experiências serão revisadas pela equipe Where2GO.<br>
-        Você receberá uma mensagem no WhatsApp quando forem aprovadas e publicadas.
-      </p>
-      <div class="publish-actions" style="margin-top:16px">
-        <button class="btn btn-ghost" onclick="closePublish()">Cancelar</button>
-        <button class="btn btn-primary" id="btnConfirmPub" onclick="confirmarPublish()">Enviar para revisão</button>
-      </div>
-    </div>
-  </div>
 </div>
 
 <div id="toast" class="toast"></div>
@@ -519,7 +479,7 @@ function buildCard(exp,idx){
     <div class="editable" onclick="editField(${idx},'descricao_completa',this,'textarea')"><div class="desc-completa">${esc(exp.descricao_completa)}</div></div>
     <div class="editable" onclick="editField(${idx},'preco_por_pessoa',this)"><div class="price-row"><span class="price">R$${exp.preco_por_pessoa}</span><span class="price-fmt">${esc(exp.preco_formato)}</span></div></div>
     <div class="card-actions">
-      <button class="btn-publish" id="pub-${idx}" onclick="event.stopPropagation();abrirPublish(${idx})">📤 Publicar experiência</button>
+      <button class="btn-publish" id="pub-${idx}" onclick="event.stopPropagation();salvarDireto(${idx})">💾 Salvar experiência</button>
     </div>`;
   return card;
 }
@@ -542,75 +502,24 @@ function exportarTodas(){navigator.clipboard.writeText(JSON.stringify(dadosAtuai
 function voltarForm(){showPanel('formPanel')}
 
 /* ══════════════════════════════════════
-   PUBLISH + GOOGLE SHEETS
+   SALVAR (versão time — sem coleta de lead)
    ══════════════════════════════════════ */
-function getSheetsUrl(){ return W2GO_SHEETS_URL; }
-
-let publishIdx = null;
-
-function abrirPublish(idx){
+async function salvarDireto(idx){
   const exp = dadosAtuais.experiencias[idx];
-  publishIdx = idx;
-  document.getElementById('publishInfo').innerHTML =
-    `<strong>${esc(exp.nome)}</strong> · ${esc(exp.ocasiao)}<br>` +
-    `${esc(exp.publico)} · R$${exp.preco_por_pessoa} ${esc(exp.preco_formato)}`;
-  document.getElementById('pubError').style.display = 'none';
-  document.getElementById('publishModal').classList.add('show');
-  // Pre-fill if already filled before
-  if(!document.getElementById('pubNome').value && dadosAtuais._lastContact){
-    document.getElementById('pubNome').value = dadosAtuais._lastContact.nome || '';
-    document.getElementById('pubEmail').value = dadosAtuais._lastContact.email || '';
-    document.getElementById('pubWhatsapp').value = dadosAtuais._lastContact.whatsapp || '';
-    document.getElementById('pubCargo').value = dadosAtuais._lastContact.cargo || '';
-  }
-}
+  const btn = document.getElementById(`pub-${idx}`);
+  btn.textContent = 'Salvando...';
+  btn.classList.add('loading');
 
-function closePublish(){
-  document.getElementById('publishModal').classList.remove('show');
-  publishIdx = null;
-}
-
-async function confirmarPublish(){
-  const nome = document.getElementById('pubNome').value.trim();
-  const email = document.getElementById('pubEmail').value.trim();
-  const whatsapp = document.getElementById('pubWhatsapp').value.trim();
-  const cargo = document.getElementById('pubCargo').value.trim();
-  const errEl = document.getElementById('pubError');
-
-  // Validação
-  if(!nome || !email || !whatsapp){
-    errEl.textContent = 'Preencha nome, email e WhatsApp para continuar.';
-    errEl.style.display = 'block';
-    return;
-  }
-  if(!email.includes('@')){
-    errEl.textContent = 'Email inválido.';
-    errEl.style.display = 'block';
-    return;
-  }
-  errEl.style.display = 'none';
-
-  // Save contact for re-use
-  dadosAtuais._lastContact = { nome, email, whatsapp, cargo };
-
-  const idx = publishIdx;
-  const exp = dadosAtuais.experiencias[idx];
-  const telefoneEstab = document.getElementById('telefoneInput').value.trim();
-
-  // Payload
   const payload = {
     timestamp: new Date().toISOString(),
-    // Contato (lead)
-    contato_nome: nome,
-    contato_email: email,
-    contato_whatsapp: whatsapp,
-    contato_cargo: cargo,
-    // Estabelecimento
+    contato_nome: 'Time Where2GO',
+    contato_email: '',
+    contato_whatsapp: '',
+    contato_cargo: 'Interno',
     estabelecimento: dadosAtuais.estabelecimento,
-    estabelecimento_telefone: telefoneEstab,
+    estabelecimento_telefone: '',
     estabelecimento_bairro: document.getElementById('bairroInput').value.trim(),
     estabelecimento_instagram: document.getElementById('instaInput').value.trim(),
-    // Experiência
     experiencia_nome: exp.nome,
     experiencia_ocasiao: exp.ocasiao,
     experiencia_publico: exp.publico,
@@ -624,49 +533,19 @@ async function confirmarPublish(){
     experiencia_tag: exp.tag
   };
 
-  // Send to Google Sheets
-  const btn = document.getElementById('btnConfirmPub');
-  btn.textContent = 'Enviando...';
-  btn.classList.add('loading');
-
   try {
-    const sheetsUrl = getSheetsUrl();
-    if(sheetsUrl){
-      await fetch(sheetsUrl, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-    }
-  } catch(e) {
-    // no-cors won't give error details, but data is sent
-  }
+    await fetch(W2GO_SHEETS_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch(e) {}
 
-  btn.textContent = 'Enviar para revisão';
-  btn.classList.remove('loading');
-
-  // Mark button as published
-  const pubBtn = document.getElementById(`pub-${idx}`);
-  if(pubBtn){
-    pubBtn.textContent = '✅ Enviada para revisão';
-    pubBtn.classList.add('published');
-    pubBtn.onclick = null;
-  }
-
-  // Show success banner
-  const banner = document.getElementById('successBanner');
-  document.getElementById('successText').innerHTML =
-    `<strong>"${esc(exp.nome)}"</strong> enviada para revisão! ` +
-    `Você receberá uma mensagem em <strong>${esc(whatsapp)}</strong> quando for aprovada.`;
-  banner.classList.add('show');
-
-  closePublish();
-  showToast('Experiência enviada!');
-  window.scrollTo({top: document.getElementById('resultsPanel').offsetTop, behavior:'smooth'});
+  btn.textContent = '✅ Salva';
+  btn.classList.add('published');
+  btn.onclick = null;
+  showToast('Experiência salva!');
 }
-
-document.getElementById('publishModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closePublish()});
 
 /* ── Enter to submit ── */
 document.getElementById('nomeInput').addEventListener('keydown',e=>{if(e.key==='Enter')gerar()});
