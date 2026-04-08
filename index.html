@@ -161,36 +161,80 @@ textarea.edit-input{min-height:80px}
     </div>
 
     <div class="search-card">
-      <div class="search-main">
-        <input id="nomeInput" placeholder="Nome do restaurante ou bar..." autofocus>
+      <!-- CONTEXT TOGGLE -->
+      <div style="display:flex;gap:12px;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:20px">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;font-weight:500">
+          <input type="radio" name="context" value="search" checked> 🔍 Buscar na web
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;font-weight:500">
+          <input type="radio" name="context" value="local"> 📊 Modo local
+        </label>
       </div>
-      <div class="search-row2">
-        <input id="bairroInput" placeholder="Bairro (opcional)" value="São Paulo">
-        <input id="instaInput" placeholder="Instagram (opcional)" value="">
-      </div>
-      <div class="ocasioes-section">
-        <label>Ocasiões prioritárias <span style="font-weight:400;color:#aaa">(opcional — selecione as que quiser)</span></label>
-        <div class="chip-group multi-select" id="ocasioesGroup">
-          <div class="chip-opt" data-v="Date Night">💑 Date Night</div>
-          <div class="chip-opt" data-v="Aniversário">🎂 Aniversário</div>
-          <div class="chip-opt" data-v="Grupo de Amigos">👯 Grupo de Amigos</div>
-          <div class="chip-opt" data-v="Brunch">🥞 Brunch</div>
-          <div class="chip-opt" data-v="Happy Hour">🍻 Happy Hour</div>
-          <div class="chip-opt" data-v="Comemoração">🥂 Comemoração</div>
-          <div class="chip-opt" data-v="Despedida">🎊 Despedida</div>
-          <div class="chip-opt" data-v="Família">👨‍👩‍👧‍👦 Família</div>
+
+      <!-- SEARCH MODE (padrão) -->
+      <div id="searchMode">
+        <div class="search-main">
+          <input id="nomeInput" placeholder="Nome do restaurante ou bar..." autofocus>
+        </div>
+        <div class="search-row2">
+          <input id="cityInput" placeholder="Cidade" value="São Paulo">
+          <input id="bairroInput" placeholder="Bairro ou região (opcional)">
         </div>
       </div>
 
+      <!-- LOCAL MODE (escondido) -->
+      <div id="localMode" style="display:none">
+        <div class="search-main">
+          <input id="placeIdInput" placeholder="ID do estabelecimento (place_id)...">
+        </div>
+      </div>
+
+      <!-- CAMPOS COMUNS -->
+      <div class="search-row2">
+        <input id="instaInput" placeholder="Instagram (opcional)">
+        <select id="categoryInput" style="padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;flex:1;transition:border .2s;cursor:pointer">
+          <option value="">Categoria (opcional)</option>
+          <option value="Restaurantes">🍽️ Restaurantes</option>
+          <option value="Bares">🍸 Bares</option>
+          <option value="Cafés">☕ Cafés</option>
+          <option value="Baladas">🎉 Baladas</option>
+          <option value="Comemorações">🎊 Comemorações</option>
+          <option value="Dates">💑 Dates</option>
+          <option value="Social">👥 Social</option>
+          <option value="Cultural">🎭 Cultural</option>
+          <option value="Lazer">🎮 Lazer</option>
+          <option value="Bem-estar">🧘 Bem-estar</option>
+          <option value="Parques">🏞️ Parques</option>
+          <option value="Compras">🛍️ Compras</option>
+          <option value="Agenda">📅 Agenda</option>
+        </select>
+      </div>
+
+      <!-- PREÇOS E QUANTIDADE -->
+      <div class="search-row2">
+        <input id="minPriceInput" type="number" placeholder="Preço mín. (R$)" min="0" step="10">
+        <input id="maxPriceInput" type="number" placeholder="Preço máx. (R$)" min="0" step="10">
+        <select id="suggestionsInput" style="padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;flex:1;cursor:pointer">
+          <option value="3" selected>3 sugestões</option>
+          <option value="4">4 sugestões</option>
+          <option value="5">5 sugestões</option>
+          <option value="6">6 sugestões</option>
+          <option value="7">7 sugestões</option>
+          <option value="8">8 sugestões</option>
+          <option value="9">9 sugestões</option>
+          <option value="10">10 sugestões</option>
+        </select>
+      </div>
+
       <details style="margin-bottom:18px">
-        <summary style="cursor:pointer;font-size:13px;color:var(--muted);font-weight:500">Informações extras (opcional)</summary>
+        <summary style="cursor:pointer;font-size:13px;color:var(--muted);font-weight:500">ℹ️ Informações extras (opcional)</summary>
         <div style="margin-top:12px">
-          <textarea id="extrasInput" rows="4" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;resize:vertical" placeholder="Cole aqui qualquer info extra: cardápio, pratos em destaque, preços, observações sobre o lugar..."></textarea>
+          <textarea id="extrasInput" rows="3" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;resize:vertical" placeholder="Cole aqui qualquer info extra: cardápio, pratos em destaque, observações sobre o lugar..."></textarea>
         </div>
       </details>
 
       <button class="btn btn-primary full" id="btnGerar" onclick="gerar()">
-        Pesquisar e Gerar Experiências
+        Gerar Experiências
       </button>
       <div id="errorMsg" class="error-msg"></div>
     </div>
@@ -239,12 +283,10 @@ textarea.edit-input{min-height:80px}
 /* ══════════════════════════════════════
    CONFIG (interno — não exposto ao usuário)
    ══════════════════════════════════════ */
-const W2GO_API_KEY = 'AIzaSyCOIhW72xPxLQV5zJI_GxI97Noe7-bpdQo';
-const W2GO_MODEL = 'gemini-2.5-flash';
 const W2GO_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwjrrHuMWKtb3OlOd3mAAMrxCireEIK_RQdAIWj7ie0KG1SwbZv-mIy08849PpOWwYQ-g/exec';
 
 /* ══════════════════════════════════════
-   CHIPS MULTI-SELECT
+   CHIPS MULTI-SELECT (mantém se houver)
    ══════════════════════════════════════ */
 document.querySelectorAll('.multi-select').forEach(g=>{
   g.querySelectorAll('.chip-opt').forEach(c=>{
@@ -252,6 +294,19 @@ document.querySelectorAll('.multi-select').forEach(g=>{
   });
 });
 function getMulti(id){return[...document.getElementById(id).querySelectorAll('.selected')].map(s=>s.dataset.v)}
+
+/* ══════════════════════════════════════
+   CONTEXT TOGGLE (local/search)
+   ══════════════════════════════════════ */
+document.querySelectorAll('input[name="context"]').forEach(radio => {
+  radio.addEventListener('change', (e) => {
+    const isSearch = e.target.value === 'search';
+    document.getElementById('searchMode').style.display = isSearch ? 'block' : 'none';
+    document.getElementById('localMode').style.display = isSearch ? 'none' : 'block';
+    if(isSearch) document.getElementById('nomeInput').focus();
+    else document.getElementById('placeIdInput').focus();
+  });
+});
 
 /* ══════════════════════════════════════
    HELPERS
@@ -330,103 +385,91 @@ FORMATO DE RESPOSTA — retorne EXATAMENTE este JSON (sem markdown, sem crases, 
 IMPORTANTE: Retorne APENAS o JSON. Sem texto antes, sem texto depois, sem markdown.`;
 
 /* ══════════════════════════════════════
-   GENERATE
+   GENERATE (via API)
    ══════════════════════════════════════ */
 let dadosAtuais = null;
 
 async function gerar(){
   hideError();
-  const nome = document.getElementById('nomeInput').value.trim();
-  const bairro = document.getElementById('bairroInput').value.trim();
-  const insta = document.getElementById('instaInput').value.trim();
+  
+  // Get context
+  const context = document.querySelector('input[name="context"]:checked').value;
+  const suggestionsCount = parseInt(document.getElementById('suggestionsInput').value) || 3;
+  const category = document.getElementById('categoryInput').value || null;
+  const minPrice = document.getElementById('minPriceInput').value ? parseInt(document.getElementById('minPriceInput').value) : null;
+  const maxPrice = document.getElementById('maxPriceInput').value ? parseInt(document.getElementById('maxPriceInput').value) : null;
   const extras = document.getElementById('extrasInput').value.trim();
-  const ocasioes = getMulti('ocasioesGroup');
-  const apiKey = W2GO_API_KEY;
-  const model = W2GO_MODEL;
 
-  if(!nome){showError('Digite o nome do restaurante.');return}
+  let estabName = '';
+  let payload = {
+    context: context,
+    suggestions_count: suggestionsCount
+  };
 
-  // Build user message
-  let msg = `Pesquise e gere experiências Where2GO para: ${nome}`;
-  if(bairro) msg += `, ${bairro}`;
-  if(insta) msg += `\nInstagram: ${insta}`;
-  if(ocasioes.length) msg += `\nOcasiões prioritárias: ${ocasioes.join(', ')}`;
-  if(extras) msg += `\nInformações extras fornecidas:\n${extras}`;
-  msg += `\n\nUse os dados do Google Search para encontrar cardápio real, preços, ambiente e avaliações. Depois gere 3-5 experiências baseadas no que encontrar.`;
+  // Build payload based on context
+  if(context === 'search'){
+    estabName = document.getElementById('nomeInput').value.trim();
+    const city = document.getElementById('cityInput').value.trim();
+    const address = document.getElementById('bairroInput').value.trim();
+    const insta = document.getElementById('instaInput').value.trim();
+
+    if(!estabName){
+      showError('Digite o nome do restaurante/estabelecimento.');
+      return;
+    }
+
+    payload.establishment_name = estabName;
+    if(city) payload.city = city;
+    if(address) payload.address = address;
+  } else {
+    // local mode
+    const placeId = document.getElementById('placeIdInput').value.trim();
+    if(!placeId){
+      showError('Digite o ID do estabelecimento (place_id).');
+      return;
+    }
+    payload.place_id = placeId;
+    estabName = placeId;
+  }
+
+  // Add optional fields
+  if(category) payload.category = category;
+  if(minPrice !== null || maxPrice !== null){
+    if(minPrice !== null) payload.min_price = minPrice;
+    if(maxPrice !== null) payload.max_price = maxPrice;
+  }
+  if(extras) payload.extra_info = extras;
 
   showPanel('loadingPanel');
-  document.getElementById('loadingTitle').textContent = `Pesquisando ${nome}...`;
-  document.getElementById('loadingSub').textContent = '';
+  document.getElementById('loadingTitle').textContent = `Gerando experiências para ${estabName}...`;
+  document.getElementById('loadingSub').textContent = context === 'search' 
+    ? 'Pode levar 15-45 segundos...' 
+    : 'Consultando banco de dados...';
+  
   const stepsIv = animateSteps();
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-
-    const resp = await fetch(url, {
+    const resp = await fetch('https://prod-w2go-43059108427.us-central1.run.app/api/suggestions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-        contents: [{ role: 'user', parts: [{ text: msg }] }],
-        tools: [{ google_search: {} }],
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 8192
-        }
-      })
+      body: JSON.stringify(payload)
     });
 
     clearInterval(stepsIv);
 
     if(!resp.ok){
       const err = await resp.json().catch(()=>({}));
-      const errMsg = err.error?.message || `Erro HTTP ${resp.status}`;
+      const errMsg = err.message || err.error?.message || `Erro HTTP ${resp.status}`;
       throw new Error(errMsg);
     }
 
     const data = await resp.json();
-
-    // Extract grounding sources and text
-    let searches = [];
-    let finalText = '';
-
-    const candidate = data.candidates?.[0];
-    if(!candidate) throw new Error('Nenhuma resposta da IA. Tente novamente.');
-
-    // Get text from parts
-    for(const part of (candidate.content?.parts || [])){
-      if(part.text) finalText += part.text;
+    if(!data.experiencias || !Array.isArray(data.experiencias)){
+      throw new Error('Resposta inválida da API. Tente novamente.');
     }
 
-    // Get grounding metadata (sources)
-    const grounding = candidate.groundingMetadata;
-    if(grounding?.groundingChunks){
-      for(const chunk of grounding.groundingChunks){
-        if(chunk.web){
-          searches.push((chunk.web.title||'') + ' — ' + (chunk.web.uri||''));
-        }
-      }
-    }
-    if(grounding?.searchEntryPoint?.renderedContent){
-      // Google search widget HTML (optional display)
-    }
-
-    if(!finalText) throw new Error('A IA não retornou texto. Tente novamente.');
-
-    let json;
-    try {
-      // Remove markdown code fences if present
-      let cleaned = finalText.replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();
-      json = JSON.parse(cleaned);
-    } catch {
-      const match = finalText.match(/\{[\s\S]*\}/);
-      if(match) json = JSON.parse(match[0]);
-      else throw new Error('Resposta não é JSON válido. Tente novamente.');
-    }
-
-    dadosAtuais = json;
-    dadosAtuais._searches = searches;
-    renderResults(json);
+    dadosAtuais = data;
+    renderResults(data);
 
   } catch(e) {
     clearInterval(stepsIv);
@@ -439,8 +482,23 @@ async function gerar(){
    RENDER RESULTS
    ══════════════════════════════════════ */
 function renderResults(data){
+  // Normalize API response: map field names to expected format
+  const experiencias = (data.experiencias || []).map(exp => ({
+    nome: exp.title || exp.nome || '',
+    ocasiao: exp.category || exp.ocasiao || '',
+    publico: exp.publico || '',
+    tipo_combo: exp.tipo_combo || '',
+    itens_inclusos: exp.itens_inclusos || [],
+    elemento_especial: exp.elemento_especial || '',
+    descricao_curta: exp.descricao_curta || '',
+    descricao_completa: exp.description || exp.descricao_completa || '',
+    preco_por_pessoa: exp.price || exp.preco_por_pessoa || 0,
+    preco_formato: exp.quantity || exp.preco_formato || 'por pessoa',
+    tag: exp.tag || ''
+  }));
+
   document.getElementById('resultsTitle').textContent =
-    `${data.estabelecimento} — ${data.experiencias.length} experiências`;
+    `${data.estabelecimento} — ${experiencias.length} experiências`;
 
   // Research context
   let contextText = '';
@@ -452,7 +510,11 @@ function renderResults(data){
 
   const c = document.getElementById('cardsContainer');
   c.innerHTML = '';
-  data.experiencias.forEach((exp,i) => c.appendChild(buildCard(exp,i)));
+  experiencias.forEach((exp,i) => c.appendChild(buildCard(exp,i)));
+  
+  // Update dadosAtuais with normalized data
+  dadosAtuais.experiencias = experiencias;
+  
   showPanel('resultsPanel');
 }
 
@@ -502,7 +564,7 @@ function exportarTodas(){navigator.clipboard.writeText(JSON.stringify(dadosAtuai
 function voltarForm(){showPanel('formPanel')}
 
 /* ══════════════════════════════════════
-   SALVAR (versão time — sem coleta de lead)
+   SALVAR (versão time — envia à API + Sheets)
    ══════════════════════════════════════ */
 async function salvarDireto(idx){
   const exp = dadosAtuais.experiencias[idx];
@@ -510,7 +572,27 @@ async function salvarDireto(idx){
   btn.textContent = 'Salvando...';
   btn.classList.add('loading');
 
-  const payload = {
+  // Payload para API de Sugestões
+  const apiPayload = {
+    estabelecimento: dadosAtuais.estabelecimento,
+    estabelecimento_bairro: document.getElementById('bairroInput').value.trim(),
+    estabelecimento_instagram: document.getElementById('instaInput').value.trim(),
+    experiencia: {
+      title: exp.nome,
+      category: exp.ocasiao,
+      publico: exp.publico,
+      tipo_combo: exp.tipo_combo,
+      itens_inclusos: exp.itens_inclusos || [],
+      elemento_especial: exp.elemento_especial,
+      description: exp.descricao_completa,
+      price: exp.preco_por_pessoa,
+      quantity: exp.preco_formato,
+      tag: exp.tag
+    }
+  };
+
+  // Payload para Sheets (mantém compatibilidade)
+  const sheetsPayload = {
     timestamp: new Date().toISOString(),
     contato_nome: 'Time Where2GO',
     contato_email: '',
@@ -534,10 +616,25 @@ async function salvarDireto(idx){
   };
 
   try {
+    // Enviar à API
+    const apiResp = await fetch('https://prod-w2go-43059108427.us-central1.run.app/api', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(apiPayload)
+    });
+    if(!apiResp.ok && apiResp.status !== 404) {
+      console.warn('Aviso na API:', apiResp.status);
+    }
+  } catch(e) {
+    console.warn('Erro ao chamar API:', e.message);
+  }
+
+  try {
+    // Enviar ao Sheets
     await fetch(W2GO_SHEETS_URL, {
       method: 'POST', mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(sheetsPayload)
     });
   } catch(e) {}
 

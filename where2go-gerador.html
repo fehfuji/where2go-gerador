@@ -283,8 +283,6 @@ textarea.edit-input{min-height:80px}
 /* ══════════════════════════════════════
    CONFIG (interno — não exposto ao usuário)
    ══════════════════════════════════════ */
-const W2GO_API_KEY = 'AIzaSyCOIhW72xPxLQV5zJI_GxI97Noe7-bpdQo';
-const W2GO_MODEL = 'gemini-2.5-flash';
 const W2GO_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwjrrHuMWKtb3OlOd3mAAMrxCireEIK_RQdAIWj7ie0KG1SwbZv-mIy08849PpOWwYQ-g/exec';
 
 /* ══════════════════════════════════════
@@ -451,7 +449,7 @@ async function gerar(){
   const stepsIv = animateSteps();
 
   try {
-    const resp = await fetch('http://localhost:8080/api/suggestions', {
+    const resp = await fetch('https://prod-w2go-43059108427.us-central1.run.app/api/suggestions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -619,7 +617,7 @@ async function salvarDireto(idx){
 
   try {
     // Enviar à API
-    const apiResp = await fetch('http://localhost:8080/api', {
+    const apiResp = await fetch('https://prod-w2go-43059108427.us-central1.run.app/api', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(apiPayload)

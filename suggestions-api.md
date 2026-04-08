@@ -36,7 +36,7 @@ Busca produtos cadastrados no banco de dados para um estabelecimento específico
 ### Exemplo de Request (local)
 
 ```bash
-curl -X POST http://localhost:8080/api/suggestions \
+curl -X POST https://prod-w2go-43059108427.us-central1.run.app/api/suggestions \
   -H "Content-Type: application/json" \
   -d '{
     "context": "local",
@@ -99,7 +99,7 @@ Busca informações sobre um estabelecimento via Google Search e gera sugestões
 ### Exemplo de Request (search)
 
 ```bash
-curl -X POST http://localhost:8080/api/suggestions \
+curl -X POST https://prod-w2go-43059108427.us-central1.run.app/api/suggestions \
   -H "Content-Type: application/json" \
   -d '{
     "context": "search",
